@@ -5,6 +5,8 @@ import com.example.drugAPI.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @RestController
 public class DrugsApiController {
@@ -12,7 +14,7 @@ public class DrugsApiController {
     private final DrugService drugService;
 
     @GetMapping("/api/searchDrug/{drugName}")
-    public DrugSearchResponseDto findByDrugName(@PathVariable String drugName) {
+    public DrugSearchResponseDto findByDrugName(@PathVariable String drugName) throws IOException {
         return drugService.findByDrugName(DrugSearchRequestDto.builder().drugName(drugName).build());
     }
 

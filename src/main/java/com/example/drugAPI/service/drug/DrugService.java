@@ -3,10 +3,12 @@ package com.example.drugAPI.service.drug;
 import com.example.drugAPI.domains.drugs.Drug;
 import com.example.drugAPI.domains.drugs.DrugRepository;
 import com.example.drugAPI.web.dto.*;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -19,21 +21,25 @@ public class DrugService {
     private final OpenFeignClient openFeignClient;
 
     @Transactional
-    public DrugSearchResponseDto findByDrugName(DrugSearchRequestDto drugSearchRequestDto) {
+    public DrugSearchResponseDto findByDrugName(DrugSearchRequestDto drugSearchRequestDto) throws IOException {
         Optional<Drug> drug = drugRepository.findByDrugName(drugSearchRequestDto.getDrugName());
         if (drug.isPresent()) {
             return new DrugSearchResponseDto(drug.get());
         }
         else {
             String encodedDrugName = URLDecoder.decode(drugSearchRequestDto.getDrugName(), StandardCharsets.UTF_8);
-            DrugApiResponse drugApiResponse = getDrugData(encodedDrugName);
-            return new DrugSearchResponseDto(drugApiResponse);
+            DrugSearchResponseDto drugSearchResponseDto = new DrugSearchResponseDto(getDrugData(encodedDrugName));
+            saveDrug(new DrugSaveRequestDto(drugSearchResponseDto));
+            return drugSearchResponseDto;
         }
     }
 
-    public DrugApiResponse getDrugData(String drugName) {
+    public DrugApiResponse.response getDrugData(String drugName) throws IOException {
         String encodedServiceKey = URLDecoder.decode("MTcyNsGIdG6%2Bp%2FS6qkaEJJpjMefo31MZubzlFG%2B%2Fk8AB0MSbWmRKn%2BSFFmnWHXjFls7CGSpC5f8suZEQD4KWlw%3D%3D", StandardCharsets.UTF_8);
-        return openFeignClient.getDrugData(encodedServiceKey, drugName, "json");
+        String xmlResponse = openFeignClient.getDrugData(encodedServiceKey, drugName);
+        XmlMapper xmlMapper = new XmlMapper();
+        DrugApiResponse.response value = xmlMapper.readValue(xmlResponse, DrugApiResponse.response.class);
+        return value;
     }
 
     @Transactional

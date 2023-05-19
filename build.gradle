@@ -26,6 +26,8 @@ dependencies {
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 
 	implementation 'mysql:mysql-connector-java:8.0.32'
+	implementation group: 'org.json', name: 'json', version: '20180813'
+	implementation 'com.google.code.gson:gson:2.10.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

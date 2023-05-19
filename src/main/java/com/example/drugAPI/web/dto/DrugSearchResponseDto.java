@@ -21,7 +21,7 @@ public class DrugSearchResponseDto {
         this.useMethodQesitm = drug.getUseMethodQesitm();
     }
 
-    public DrugSearchResponseDto(DrugApiResponse drugApiResponse) {
+    public DrugSearchResponseDto(DrugApiResponse.response drugApiResponse) {
         this.drugName = drugApiResponse.getItemName();
         this.entpName = drugApiResponse.getEntpName();
         this.efcyQesitm = drugApiResponse.getEfcyQesitm();
