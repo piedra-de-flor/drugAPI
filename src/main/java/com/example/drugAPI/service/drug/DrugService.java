@@ -54,4 +54,10 @@ public class DrugService {
 
         return new DrugReadResponseDto(drug);
     }
+
+    @Transactional
+    public DrugReadAllResponseDto readAllMyDrug () {
+        return new DrugReadAllResponseDto(drugRepository.findAll());
+    }
+
 }

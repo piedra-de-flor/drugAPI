@@ -27,4 +27,9 @@ public class DrugsApiController {
     public DrugReadResponseDto readDrug(@PathVariable String drugName) {
         return drugService.readMyDrug(DrugReadRequestDto.builder().drugName(drugName).build());
     }
+
+    @GetMapping("/readAll")
+    public DrugReadAllResponseDto readDrug() {
+        return drugService.readAllMyDrug();
+    }
 }
