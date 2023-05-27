@@ -1,11 +1,13 @@
 package com.example.drugAPI.web.controller;
 
+import com.example.drugAPI.domains.drugs.Drug;
 import com.example.drugAPI.service.drug.DrugService;
 import com.example.drugAPI.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +31,7 @@ public class DrugsApiController {
     }
 
     @GetMapping("/readAll")
-    public DrugReadAllResponseDto readDrug() {
+    public List<Drug> readDrug() {
         return drugService.readAllMyDrug();
     }
 }

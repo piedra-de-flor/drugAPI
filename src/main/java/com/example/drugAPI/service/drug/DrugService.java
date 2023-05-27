@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -44,7 +45,10 @@ public class DrugService {
 
     @Transactional
     public String saveDrug (DrugSaveRequestDto drugSaveRequestDto) {
-        return drugRepository.save(drugSaveRequestDto.toEntity()).getDrugName();
+        if (drugRepository.findByDrugName(drugSaveRequestDto.getDrugName()).isPresent()) {
+            return "이미 있습니당";
+        }
+        else return drugRepository.save(drugSaveRequestDto.toEntity()).getDrugName();
     }
 
     @Transactional
@@ -56,8 +60,8 @@ public class DrugService {
     }
 
     @Transactional
-    public DrugReadAllResponseDto readAllMyDrug () {
-        return new DrugReadAllResponseDto(drugRepository.findAll());
+    public List<Drug> readAllMyDrug () {
+        return drugRepository.findAll();
     }
 
 }
