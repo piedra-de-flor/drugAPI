@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,7 @@ public class DrugService {
         Optional<Drug> drug = drugRepository.findByDrugName(drugSearchRequestDto.getDrugName());
         if (drug.isPresent()) {
             return new DrugSearchResponseDto(drug.get());
-        }
-        else {
+        } else {
             String encodedDrugName = URLDecoder.decode(drugSearchRequestDto.getDrugName(), StandardCharsets.UTF_8);
             DrugSearchResponseDto drugSearchResponseDto = new DrugSearchResponseDto(getDrugData(encodedDrugName));
             saveDrug(new DrugSaveRequestDto(drugSearchResponseDto));
@@ -35,24 +35,23 @@ public class DrugService {
         }
     }
 
-    public DrugApiResponse.response getDrugData(String drugName) throws IOException {
+    public DrugApiResponseDto.response getDrugData(String drugName) throws IOException {
         String encodedServiceKey = URLDecoder.decode("MTcyNsGIdG6%2Bp%2FS6qkaEJJpjMefo31MZubzlFG%2B%2Fk8AB0MSbWmRKn%2BSFFmnWHXjFls7CGSpC5f8suZEQD4KWlw%3D%3D", StandardCharsets.UTF_8);
         String xmlResponse = openFeignClient.getDrugData(encodedServiceKey, drugName);
         XmlMapper xmlMapper = new XmlMapper();
-        DrugApiResponse.response value = xmlMapper.readValue(xmlResponse, DrugApiResponse.response.class);
+        DrugApiResponseDto.response value = xmlMapper.readValue(xmlResponse, DrugApiResponseDto.response.class);
         return value;
     }
 
     @Transactional
-    public String saveDrug (DrugSaveRequestDto drugSaveRequestDto) {
+    public String saveDrug(DrugSaveRequestDto drugSaveRequestDto) {
         if (drugRepository.findByDrugName(drugSaveRequestDto.getDrugName()).isPresent()) {
             return "이미 있습니당";
-        }
-        else return drugRepository.save(drugSaveRequestDto.toEntity()).getDrugName();
+        } else return drugRepository.save(drugSaveRequestDto.toEntity()).getDrugName();
     }
 
     @Transactional
-    public DrugReadResponseDto readMyDrug (DrugReadRequestDto drugReadRequestDto) {
+    public DrugReadResponseDto readMyDrug(DrugReadRequestDto drugReadRequestDto) {
         Drug drug = drugRepository.findByDrugName(drugReadRequestDto.getDrugName())
                 .orElseThrow(() -> new IllegalArgumentException("해당 약품은 존재하지 않습니다."));
 
@@ -60,8 +59,13 @@ public class DrugService {
     }
 
     @Transactional
-    public List<Drug> readAllMyDrug () {
-        return drugRepository.findAll();
+    public List<String> readAllMyDrug() {
+        List<String> drugNameList = new ArrayList<>();
+        for (Drug drug : drugRepository.findAll()) {
+            drugNameList.add(drug.getDrugName());
+        };
+
+        return drugNameList;
     }
 
 }

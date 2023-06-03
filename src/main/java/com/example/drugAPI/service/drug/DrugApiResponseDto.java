@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class DrugApiResponse {
+public class DrugApiResponseDto {
     @Data
     @NoArgsConstructor
     public static class header {
@@ -59,9 +59,7 @@ public class DrugApiResponse {
             return body.items.item.entpName;
         }
 
-        public String getEfcyQesitm() {
-            return body.items.item.efcyQesitm;
-        }
+        public String getEfcyQesitm() {return body.items.item.efcyQesitm;}
 
         public String getUseMethodQesitm() {
             return body.items.item.useMethodQesitm;

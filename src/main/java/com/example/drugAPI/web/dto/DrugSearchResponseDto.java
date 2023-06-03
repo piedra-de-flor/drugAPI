@@ -1,7 +1,7 @@
 package com.example.drugAPI.web.dto;
 
 import com.example.drugAPI.domains.drugs.Drug;
-import com.example.drugAPI.service.drug.DrugApiResponse;
+import com.example.drugAPI.service.drug.DrugApiResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +21,7 @@ public class DrugSearchResponseDto {
         this.useMethodQesitm = drug.getUseMethodQesitm();
     }
 
-    public DrugSearchResponseDto(DrugApiResponse.response drugApiResponse) {
+    public DrugSearchResponseDto(DrugApiResponseDto.response drugApiResponse) {
         this.drugName = drugApiResponse.getItemName();
         this.entpName = drugApiResponse.getEntpName();
         this.efcyQesitm = drugApiResponse.getEfcyQesitm();

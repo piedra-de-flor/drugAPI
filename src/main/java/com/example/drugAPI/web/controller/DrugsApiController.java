@@ -31,7 +31,7 @@ public class DrugsApiController {
     }
 
     @GetMapping("/readAll")
-    public List<Drug> readDrug() {
+    public List<String> readDrug() {
         return drugService.readAllMyDrug();
     }
 }
