@@ -22,9 +22,19 @@ public class DrugSearchResponseDto {
     }
 
     public DrugSearchResponseDto(DrugApiResponseDto.response drugApiResponse) {
-        this.drugName = drugApiResponse.getItemName();
-        this.entpName = drugApiResponse.getEntpName();
-        this.efcyQesitm = drugApiResponse.getEfcyQesitm();
-        this.useMethodQesitm = drugApiResponse.getUseMethodQesitm();
+        this.drugName = deleteExtraChar(drugApiResponse.getItemName());
+        this.entpName = deleteExtraChar(drugApiResponse.getEntpName());
+        this.efcyQesitm = deleteExtraChar(drugApiResponse.getEfcyQesitm());
+        this.useMethodQesitm = deleteExtraChar(drugApiResponse.getUseMethodQesitm());
+    }
+
+    public String deleteExtraChar(String information) {
+        String informationDeletedP = information.replaceAll("<p>", "");
+        String informationDeletedEndP = informationDeletedP.replaceAll("</p>", "");
+        String informationDeletedSub = informationDeletedEndP.replaceAll("<sub>", "");
+        String informationDeletedEndSub = informationDeletedSub.replaceAll("</sub>", "");
+        String informationDeletedSup = informationDeletedEndSub.replaceAll("<sup>", "");
+
+        return informationDeletedSup.replaceAll("</sup>", "");
     }
 }
