@@ -39,8 +39,7 @@ public class DrugService {
         String encodedServiceKey = URLDecoder.decode("MTcyNsGIdG6%2Bp%2FS6qkaEJJpjMefo31MZubzlFG%2B%2Fk8AB0MSbWmRKn%2BSFFmnWHXjFls7CGSpC5f8suZEQD4KWlw%3D%3D", StandardCharsets.UTF_8);
         String xmlResponse = openFeignClient.getDrugData(encodedServiceKey, drugName);
         XmlMapper xmlMapper = new XmlMapper();
-        DrugApiResponseDto.response value = xmlMapper.readValue(xmlResponse, DrugApiResponseDto.response.class);
-        return value;
+        return xmlMapper.readValue(xmlResponse, DrugApiResponseDto.response.class);
     }
 
     @Transactional

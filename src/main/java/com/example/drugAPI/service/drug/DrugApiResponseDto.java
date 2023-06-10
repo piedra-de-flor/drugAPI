@@ -1,9 +1,11 @@
 package com.example.drugAPI.service.drug;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DrugApiResponseDto {
     @Data
     @NoArgsConstructor
@@ -14,6 +16,7 @@ public class DrugApiResponseDto {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class item {
         public String entpName;
         public String itemName;
@@ -32,12 +35,14 @@ public class DrugApiResponseDto {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class items {
         public item item;
     }
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class body {
         public int numOfRows;
         public int pageNo;
