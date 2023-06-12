@@ -24,22 +24,29 @@ public class DrugService {
 
     @Transactional
     public DrugSearchResponseDto findByDrugName(DrugSearchRequestDto drugSearchRequestDto) throws IOException {
+        DrugSearchResponseDto drugSearchResponseDto;
         Optional<Drug> drug = drugRepository.findByDrugName(drugSearchRequestDto.getDrugName());
         if (drug.isPresent()) {
             return new DrugSearchResponseDto(drug.get());
         } else {
             String encodedDrugName = URLDecoder.decode(drugSearchRequestDto.getDrugName(), StandardCharsets.UTF_8);
-            DrugSearchResponseDto drugSearchResponseDto = new DrugSearchResponseDto(getDrugData(encodedDrugName));
-            saveDrug(new DrugSaveRequestDto(drugSearchResponseDto));
-            return drugSearchResponseDto;
+            try {
+                drugSearchResponseDto = new DrugSearchResponseDto(getDrugData(encodedDrugName));
+                saveDrug(new DrugSaveRequestDto(drugSearchResponseDto));
+            }
+            catch (NullPointerException exception) {
+                drugSearchResponseDto = findByDrugName(new DrugSearchRequestDto("해당 약품은 검색이 불가합니다"));
+            }
         }
+        return drugSearchResponseDto;
     }
 
     public DrugApiResponseDto.response getDrugData(String drugName) throws IOException {
-        String encodedServiceKey = URLDecoder.decode("MTcyNsGIdG6%2Bp%2FS6qkaEJJpjMefo31MZubzlFG%2B%2Fk8AB0MSbWmRKn%2BSFFmnWHXjFls7CGSpC5f8suZEQD4KWlw%3D%3D", StandardCharsets.UTF_8);
-        String xmlResponse = openFeignClient.getDrugData(encodedServiceKey, drugName);
-        XmlMapper xmlMapper = new XmlMapper();
-        return xmlMapper.readValue(xmlResponse, DrugApiResponseDto.response.class);
+            String encodedServiceKey = URLDecoder.decode("MTcyNsGIdG6%2Bp%2FS6qkaEJJpjMefo31MZubzlFG%2B%2Fk8AB0MSbWmRKn%2BSFFmnWHXjFls7CGSpC5f8suZEQD4KWlw%3D%3D", StandardCharsets.UTF_8);
+            String xmlResponse = openFeignClient.getDrugData(encodedServiceKey, drugName);
+            XmlMapper xmlMapper = new XmlMapper();
+            DrugApiResponseDto.response response = xmlMapper.readValue(xmlResponse, DrugApiResponseDto.response.class);
+        return response;
     }
 
     @Transactional

@@ -1,6 +1,5 @@
 package com.example.drugAPI.web.controller;
 
-import com.example.drugAPI.domains.drugs.Drug;
 import com.example.drugAPI.service.drug.DrugService;
 import com.example.drugAPI.web.dto.*;
 import lombok.RequiredArgsConstructor;
