@@ -35,7 +35,9 @@ public class DrugSearchResponseDto {
         String informationDeletedEndSub = informationDeletedSub.replaceAll("</sub>", "");
         String informationDeletedSup = informationDeletedEndSub.replaceAll("<sup>", "");
         String informationDeletedBr = informationDeletedSup.replaceAll("</br>","");
+        String informationDeletedEndBr = informationDeletedBr.replaceAll("<br />", "");
+        String informationDeletedSlashN = informationDeletedEndBr.replaceAll("\n", "");
 
-        return informationDeletedBr.replaceAll("</sup>", "");
+        return informationDeletedSlashN.replaceAll("</sup>", "");
     }
 }
